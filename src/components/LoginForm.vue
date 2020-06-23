@@ -29,6 +29,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import io from 'socket.io-client';
 
 export default {
   name: 'login-form',
@@ -49,6 +50,16 @@ export default {
     ...mapGetters([
       'hasError'
     ])
+  },
+  methods: {
+    onSubmit() {
+      const socket = io('http://localhost:3000');
+      socket.on('connect', () => {
+        socket.on('message', message => {
+          console.log(message);
+        })
+      })
+    }
   }
 }
 </script>

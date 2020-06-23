@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000');
+export const socket = io('http://localhost:3000');
+const rooms = ['HTML', 'CSS', 'JAVASCRIPT'];
 
 function handleError(commit, error) {
   const message = error.message || error.info.error_description;
@@ -11,10 +12,15 @@ export default {
     try {
       commit('setError', '');
       commit('setLoading', true);
-      // connect to socket.io
       commit('setUser', userId)
+      commit('setReconnect', false);
+      commit('setRooms', rooms);
+      const activeRoom = state.activeRoom || rooms[0];
+      commit('setActiveRoom', activeRoom);
+      socket.emit('joinRoom', { userId, activeRoom });
       console.log(state.user);
       console.log(userId);
+      return true;
     } catch (error) {
       handleError(commit, error);
     } finally {
@@ -26,7 +32,7 @@ export default {
       commit('setError', '');
       commit('setSending', true);
       // send message via socketio
-      socket.emit(message);
+      socket.emit('chatMessage', message);
       return message;
     } catch (error) {
       handleError(commit, error);

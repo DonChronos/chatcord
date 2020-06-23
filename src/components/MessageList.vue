@@ -5,14 +5,14 @@
     <div id="chat-messages" class="message-group" v-chat-scroll="{smooth: true}">
       <div class="message" v-for="(message, index) in messages" :key="index">
         <div class="clearfix">
-          <h4 class="message-title">{{ message.name }}</h4>
+          <h4 class="message-title">{{ message.username }}</h4>
           <small class="text-muted float-right">@{{ message.username }}</small>
         </div>
         <p class="message-text">
           {{ message.text }}
         </p>
         <div class="clearfix">
-          <small class="text-muted float-right">{{ message.date }}</small>
+          <small class="text-muted float-right">{{ message.time }}</small>
         </div>
       </div>
     </div>
@@ -20,13 +20,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { socket } from '../store/actions';
 
 export default {
   name: 'message-list',
   computed: {
     ...mapState([
       'messages',
+    ])
+  },
+  mounted() {
+    socket.on('message', message => {
+      console.log(message);
+      this.addMessage(message);
+    })
+  },
+  methods: {
+    ...mapMutations([
+      'addMessage'
     ])
   }
 }

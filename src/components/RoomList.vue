@@ -15,15 +15,29 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'RoomList',
   computed: {
     ...mapState([
       'rooms',
-      'activeRoom'
+      'activeRoom',
+      'user'
     ]),
+  },
+  methods: {
+    ...mapActions([
+      'changeRoom'
+    ]),
+    onChange(room) {
+      const payload = {
+        userId: this.user,
+        activeRoom: this.activeRoom,
+        room: room
+      }
+      this.changeRoom(payload);
+    }
   }
 }
 </script>

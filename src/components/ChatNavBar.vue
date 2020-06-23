@@ -11,23 +11,40 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'ChatNavBar',
   computed: {
     ...mapState([
       'user',
+      'reconnect'
     ])
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.unload);
+    if (this.reconnect) {
+      this.login(this.user);
+    }
   },
   // mounted() socketio reconnect
   methods: {
+    ...mapMutations([
+      'setReconnect'
+    ]),
     ...mapActions([
-      'logout'
+      'logout',
+      'login'
     ]),
     onLogout() {
       this.$router.push({ path: '/' });
       this.logout();
+    },
+    unload(e) {
+      console.log(e);
+      if (this.user) {
+        this.setReconnect(true);
+      }
     }
   }
 }

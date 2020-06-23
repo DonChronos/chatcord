@@ -1,6 +1,18 @@
 import io from 'socket.io-client';
 export const socket = io('http://localhost:3000');
-const rooms = ['HTML', 'CSS', 'JAVASCRIPT'];
+const rooms = [
+  {
+  id: 1,
+  name: 'HTML'
+  },
+  {
+  id: 2,
+  name: 'CSS'
+  },
+  {
+  id: 3,
+  name: 'JAVASCRIPT'
+   }];
 
 function handleError(commit, error) {
   const message = error.message || error.info.error_description;
@@ -27,7 +39,21 @@ export default {
       commit('setLoading', false);
     }
   },
-  async sendMessage ({ commit }, message) {
+  async changeRoom({ commit }, { userId, activeRoom, room }) {
+    try {
+      commit('setError', '');
+      commit('setLoading', true);
+      commit('clearChatRoom');
+      commit('setActiveRoom', room);
+      socket.emit('changeRoom', { userId, lastRoom: activeRoom, activeRoom: room});
+      return true;
+    } catch (error) {
+      handleError(commit, error);
+    } finally {
+      commit('setLoading', false)
+    }
+  },
+  async sendMessage({ commit }, message) {
     try {
       commit('setError', '');
       commit('setSending', true);

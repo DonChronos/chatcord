@@ -1,6 +1,6 @@
 <template>
   <div class="message-form ld-over">
-    <small class="text-muted">@{{ user.username }}</small>
+    <small class="text-muted">@{{ user }}</small>
     <b-form @submit.prevent="onSubmit" class="ld-over" v-bind:class="{ running: sending }">
       <b-alert variant="danger" :show="hasError">{{ error }} </b-alert>
       <b-form-group>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'message-form',
@@ -41,6 +41,15 @@ export default {
     ...mapGetters([
       'hasError'
     ])
+  },
+  methods: {
+    ...mapActions([
+      'sendMessage',
+    ]),
+    async onSubmit() {
+      const result = await this.sendMessage(this.message);
+      console.log(result);
+    }
   }
 }
 </script>

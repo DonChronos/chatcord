@@ -55,7 +55,4 @@ export default {
   color: gray;
   margin-bottom: 0;
 }
-.user-typing {
-  height: 1rem;
-}
 </style>

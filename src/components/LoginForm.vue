@@ -2,6 +2,7 @@
   <div class="login-form">
     <h5 class="text-center">Chat Login</h5>
     <hr>
+    <p v-if="socket_less">Socket connection severed. Refresh the page for new connection</p>
     <b-form @submit.prevent="onSubmit">
       <b-alert variant="danger" :show="hasError">{{error}}</b-alert>
       <b-form-group id="userInputGroup"
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'login-form',
@@ -44,13 +45,20 @@ export default {
     },
     ...mapState([
       'loading',
-      'error'
+      'error',
+      'socket_less'
     ]),
     ...mapGetters([
       'hasError'
     ])
   },
+  mounted() {
+    window.addEventListener('beforeunload', this.unload);
+  },
   methods: {
+    ...mapMutations([
+      'setSocket'
+    ]),
     ...mapActions([
       'login'
     ]),
@@ -59,6 +67,11 @@ export default {
       if (result) {
         this.$router.push('chat');
       }
+    },
+    unload(e) {
+      console.log(e);
+      this.setSocket(false);
+      this.setLoading(false);
     }
   }
 }

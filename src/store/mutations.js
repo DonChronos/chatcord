@@ -33,6 +33,9 @@ export default {
   setSending(state, status) {
     state.sending = status
   },
+  setSocket(state, status) {
+    state.socket_less = status
+  },
   reset(state) {
     state.error = null;
     state.users = [];

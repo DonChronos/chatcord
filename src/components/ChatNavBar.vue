@@ -27,10 +27,11 @@ export default {
       this.login(this.user);
     }
   },
-  // mounted() socketio reconnect
   methods: {
     ...mapMutations([
-      'setReconnect'
+      'setReconnect',
+      'setSocket',
+      'setLoading'
     ]),
     ...mapActions([
       'logout',
@@ -39,6 +40,8 @@ export default {
     onLogout() {
       this.$router.push({ path: '/' });
       this.logout();
+      this.setSocket(true);
+      this.setLoading(true);
     },
     unload(e) {
       console.log(e);

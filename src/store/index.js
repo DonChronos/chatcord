@@ -23,7 +23,7 @@ export default new Vuex.Store({
     rooms: [],
     users: [],
     messages: [],
-    userTyping: null
+    socket_less: false,
   },
   mutations,
   actions,

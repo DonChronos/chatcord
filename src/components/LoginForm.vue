@@ -57,7 +57,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setSocket'
+      'setSocket',
+      'setLoading'
     ]),
     ...mapActions([
       'login'
